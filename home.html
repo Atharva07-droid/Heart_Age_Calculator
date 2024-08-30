@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Age Calculator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9f5ff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        
+        button:hover {
+            background-color: #218838;
+        }
+        
+        #result {
+            margin-top: 30px;
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #333;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Heart Age Calculator</h2>
+        <form id="heartAgeForm">
+            <!-- Age -->
+            <label for="age">Age (30-95):</label>
+            <input type="number" id="age" name="age" min="30" max="95" required>
+
+            <!-- Gender -->
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+
+            <!-- Ethnic Group -->
+            <label for="ethnicGroup">Ethnic Group:</label>
+            <select id="ethnicGroup" name="ethnicGroup" required>
+                <option value="groupA">Indian</option>
+                <option value="groupB">White</option>
+                <option value="groupC">Other Asian</option>
+            </select>
+
+            <!-- Height -->
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" name="height" required>
+
+            <!-- Weight -->
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" name="weight" required>
+
+            <!-- Smoking -->
+            <label>Do you smoke or use tobacco products?</label>
+            <select id="smoking" name="smoking" onchange="toggleSmokingQuestions()">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <!-- Follow-up questions, initially hidden -->
+            <div id="smokingDetails" style="display:none;">
+                <label>At what age did you start smoking or using tobacco products?</label>
+                <select id="smokingStartAge" name="smokingStartAge">
+                    <option value="under15">Under 15</option>
+                    <option value="15-20">15-20</option>
+                    <option value="21-30">21-30</option>
+                    <option value="over30">Over 30</option>
+                </select>
+
+                <label>How many cigarettes or tobacco products do you consume per day?</label>
+                <select id="cigarettesPerDay" name="cigarettesPerDay">
+                    <option value="01-05">01-05</option>
+                    <option value="06-10">06-10</option>
+                    <option value="11-20">11-20</option>
+                    <option value="moreThan20">More than 20</option>
+                </select>
+            </div>
+
+            <!-- Other Health Conditions -->
+            <label>Diabetes:</label>
+            <select id="diabetes" name="diabetes">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label>Hypertension:</label>
+            <select id="hypertension" name="hypertension">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label>Medications for Hypertension:</label>
+            <select id="hypertensionMedication" name="hypertensionMedication">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label>Rheumatoid Arthritis:</label>
+            <select id="arthritis" name="arthritis">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label>Chronic Kidney Disease:</label>
+            <select id="kidneyDisease" name="kidneyDisease">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <!-- Family History of Cardiovascular Disease -->
+            <label>Family history of cardiovascular disease (age < 60 years)</label>
+            <select id="familyHistory" name="familyHistory">
+                <option value="none">None</option>
+                <option value="coronaryArteryDisease">Coronary artery disease</option>
+                <option value="peripheralArteryDisease">Peripheral artery disease</option>
+                <option value="stroke">Stroke</option>
+                <option value="prematureCoronaryDisease">History of premature coronary artery disease in family (age < 45 years)</option>
+            </select>
+
+            <!-- Symptoms -->
+            <label>Any of the following symptoms? (Select all that apply):</label>
+            <!-- <br> -->
+            <input type="checkbox" name="symptoms" value="Shortness of breath"> Shortness of breath<br>
+            <input type="checkbox" name="symptoms" value="Chest pain"> Chest pain<br>
+            <input type="checkbox" name="symptoms" value="Persistent coughing"> Persistent coughing<br>
+            <input type="checkbox" name="symptoms" value="Fatigue"> Fatigue<br>
+            <input type="checkbox" name="symptoms" value="None"> None of the above<br>
+
+            <label>Atrial Fibrillation:</label>
+            <select id="atrialFibrillation" name="atrialFibrillation">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <!-- Lipid Profile -->
+            <label>Lipid Profile:</label>
+            <select id="lipidProfile" name="lipidProfile">
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+            </select>
+
+            <!-- Physical Exercise -->
+            <label>How often do you engage in physical exercise?</label>
+            <select id="exercise" name="exercise">
+                <option value="daily">Daily</option>
+                <option value="severalTimes">Several times a week</option>
+                <option value="onceAWeek">Once a week</option>
+                <option value="rarely">Rarely</option>
+                <option value="never">Never</option>
+            </select>
+
+            <!-- Diet -->
+            <label>How would you describe your diet?</label>
+            <select id="diet" name="diet">
+                <option value="balanced">Balanced and healthy</option>
+                <option value="moderate">Moderately healthy</option>
+                <option value="unhealthy">Unhealthy</option>
+                <option value="veryUnhealthy">Very unhealthy</option>
+            </select>
+
+            <!-- <button type="button" onclick="calculateHeartAge()">Calculate Heart Age</button> -->
+            <button type="button" class="btn btn-success btn-lg btn-block" onclick="calculateHeartAge()">Calculate Heart Age</button>
+
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
